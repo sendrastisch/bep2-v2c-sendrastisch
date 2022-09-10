@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Chips {
+public class  Chips {
     @Id
     @GeneratedValue
     private Long id;
