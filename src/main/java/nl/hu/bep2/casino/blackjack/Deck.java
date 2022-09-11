@@ -10,6 +10,8 @@ public class Deck {
         this.gameDeck = new ArrayList<Card>();
     }
 
+    public ArrayList<Card> getGameDeck() { return gameDeck; }
+
     public void createFullDeck(){
         for(Suit suit : Suit.values()){
             for(Value cardValue :Value.values()){
@@ -17,7 +19,13 @@ public class Deck {
             }
         }
     }
+    public Card getNextCardFromDeck(){
 
+        Card card = this.gameDeck.get(0);
+        gameDeck.remove(card);
+
+        return card;
+    }
     public void shuffleDeck(){
         Collections.shuffle(this.gameDeck);
     }
