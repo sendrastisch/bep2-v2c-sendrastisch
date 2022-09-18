@@ -1,8 +1,8 @@
 package nl.hu.bep2.casino.blackjack;
 
+import nl.hu.bep2.casino.blackjack.domain.Card;
+import nl.hu.bep2.casino.blackjack.domain.Deck;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,7 +11,7 @@ class DeckTest {
     @Test
     //Test whether createFullDeck creates a deck with 52 cards
     void createFullDeck() {
-        Deck deck = new Deck(new ArrayList<>());
+        Deck deck = new Deck();
         deck.createFullDeck();
 
         assertEquals(52, deck.getDeckLength());
@@ -20,7 +20,7 @@ class DeckTest {
     @Test
     //Test of methode kaart teruggeeft.
     void getCardFromDeck(){
-        Deck deck = new Deck(new ArrayList<>());
+        Deck deck = new Deck();
         deck.createFullDeck();
         deck.shuffleDeck();
 
@@ -29,7 +29,7 @@ class DeckTest {
 
     @Test
     void checkIfMethodRemovesCardFromDeck(){
-        Deck deck = new Deck(new ArrayList<>());
+        Deck deck = new Deck();
         deck.createFullDeck();
         deck.shuffleDeck();
         Card card = deck.getNextCardFromDeck();
