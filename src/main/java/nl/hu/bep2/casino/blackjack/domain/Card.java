@@ -12,6 +12,10 @@ public class Card {
         this.value = value;
     }
 
+    public Value getValue() {
+        return value;
+    }
+
     @Override
     public String toString() {
         return "Card{" +

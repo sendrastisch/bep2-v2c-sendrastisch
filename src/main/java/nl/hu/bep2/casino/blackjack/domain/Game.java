@@ -37,6 +37,14 @@ public class Game {
         return playerHand;
     }
 
+    public void setDealerHand(ArrayList<Card> dealerHand) {
+        this.dealerHand = dealerHand;
+    }
+
+    public void setPlayerHand(ArrayList<Card> playerHand) {
+        this.playerHand = playerHand;
+    }
+
     public void startGame() throws GameAlreadyStartedException{
         if(this.state == GameState.PLAYING){
             throw new GameAlreadyStartedException("The game has already started");
@@ -49,21 +57,71 @@ public class Game {
         gameDeck.shuffleDeck();
 
         dealCards();
-        checkBlackjack();
+        checkBlackjackPlayer();
     }
 
-    public void checkBlackjack(){
+    public int calculateTotalValueHand(ArrayList<Card> hand){
+        int totalValue = 0;
+        int aces = 0;
 
+        for(Card card : hand){
+            switch(card.getValue()){
+                case TWO: totalValue += 2; break;
+                case THREE: totalValue += 3; break;
+                case FOUR: totalValue += 4; break;
+                case FIVE: totalValue += 5; break;
+                case SIX: totalValue += 6; break;
+                case SEVEN: totalValue += 7; break;
+                case EIGHT: totalValue += 8; break;
+                case NINE: totalValue += 9; break;
+                case TEN: totalValue += 10; break;
+                case JACK: totalValue += 10; break;
+                case QUEEN: totalValue += 10; break;
+                case KING: totalValue += 10; break;
+                case ACE: aces += 1; break;
+            }
+        }
+
+        for(int i = 0; i < aces; i++){
+            if(totalValue > 10){
+                totalValue+=1;
+            } else{
+                totalValue+=11;
+            }
+        }
+
+        return totalValue;
+    }
+
+    public boolean checkBlackjackPlayer(){
+        int totalValuePlayer = calculateTotalValueHand(this.playerHand);
+        int totalValueDealer = calculateTotalValueHand(this.dealerHand);
+
+        if(totalValuePlayer == 21 && totalValueDealer != 21){
+            this.state = GameState.BLACKJACK;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkBlackjackDealer(){
+        int totalValuePlayer = calculateTotalValueHand(this.playerHand);
+        int totalValueDealer = calculateTotalValueHand(this.dealerHand);
+
+        if(totalValueDealer == 21 && totalValuePlayer != 21){
+            this.state = GameState.LOST;
+            return true;
+        }
+        return false;
     }
 
     public void dealCards(){
         //take 2 cards from deck en geef aan speler
         playerHand.add(gameDeck.getNextCardFromDeck());
         playerHand.add(gameDeck.getNextCardFromDeck());
-
+        //take 2 cards from deck en geef aan dealer
         dealerHand.add(gameDeck.getNextCardFromDeck());
         dealerHand.add(gameDeck.getNextCardFromDeck());
-
     }
 
     public void dealerHit(){
