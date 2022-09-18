@@ -57,7 +57,7 @@ public class Game {
         gameDeck.shuffleDeck();
 
         dealCards();
-        checkBlackjackPlayer();
+        checkGamestate();
     }
 
     public int calculateTotalValueHand(ArrayList<Card> hand){
@@ -93,26 +93,42 @@ public class Game {
         return totalValue;
     }
 
-    public boolean checkBlackjackPlayer(){
-        int totalValuePlayer = calculateTotalValueHand(this.playerHand);
-        int totalValueDealer = calculateTotalValueHand(this.dealerHand);
-
-        if(totalValuePlayer == 21 && totalValueDealer != 21){
-            this.state = GameState.BLACKJACK;
-            return true;
+    public void checkGamestate() {
+        if (checkBlackjack(this.playerHand) && this.playerHand.size() == 2) {
+            if (checkBlackjack(this.dealerHand)) {
+                state = GameState.PUSH;
+            } else {
+                state = GameState.BLACKJACK;
+            }
+            return;
         }
-        return false;
+        if (checkIfOver21(this.playerHand)) {
+            state = GameState.BUST;
+            return;
+        }
+        if (checkIfOver21(this.dealerHand)) {
+            state = GameState.WON;
+            return;
+        }
+        if (state == GameState.STAND) {
+            if (calculateTotalValueHand(this.playerHand) < calculateTotalValueHand(this.dealerHand)) {
+                state = GameState.LOST;
+            } else if (calculateTotalValueHand(this.playerHand) == calculateTotalValueHand(this.dealerHand)) {
+                state = GameState.PUSH;
+            } else {
+                state = GameState.WON;
+            }
+        }
     }
 
-    public boolean checkBlackjackDealer(){
-        int totalValuePlayer = calculateTotalValueHand(this.playerHand);
-        int totalValueDealer = calculateTotalValueHand(this.dealerHand);
+    public boolean checkIfOver21(ArrayList<Card> hand){
+        return this.calculateTotalValueHand(hand) > 21;
+    }
 
-        if(totalValueDealer == 21 && totalValuePlayer != 21){
-            this.state = GameState.LOST;
-            return true;
-        }
-        return false;
+    public boolean checkBlackjack(ArrayList<Card> hand){
+        int total = calculateTotalValueHand(hand);
+
+        return total == 21;
     }
 
     public void dealCards(){
@@ -124,40 +140,18 @@ public class Game {
         dealerHand.add(gameDeck.getNextCardFromDeck());
     }
 
-    public void dealerHit(){
-
-    }
-
-    public void userMoves(String move){
-        switch (move) {
-            case "hit":
-                //do hit thing
-                break;
-            case "dd":
-                //do double down thing
-                break;
-            case "surrender":
-                //do surrender thing
-                break;
-            case "stand":
-                //do stand thing
-                break;
-        }
-    }
-
     public long calculatePayout(){
         long payout = 0;
 
-        switch(state){
+        switch(this.state){
             case WON:
                payout = this.bet * 2;
                break;
             case LOST:
-                payout = 0;
+            case PUSH:
+                break;
             case SURRENDERED:
                 payout = (long) (this.bet * 0.5);
-                break;
-            case PUSH:
                 break;
             case BLACKJACK:
                 payout = (long) (this.bet * 1.5);

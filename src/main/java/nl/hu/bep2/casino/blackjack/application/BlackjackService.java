@@ -29,5 +29,27 @@ public class BlackjackService {
         return game.getGameDTO();
     }
 
+//    public GameDTO hit(){
+//        Game game = gameRepository.findById(gameId).orElseThrow(() -> new NoGamesFoundException("Wrong id."));
+//        game.hit();
+//
+//    }
+
+//    public GameDTO stand(){
+//
+//    }
+//
+//    public GameDTO surrender(){
+//
+//    }
+//
+//    public GameDTO doubleDown(){
+//
+//    }
+
+
+
+
+
 
 }

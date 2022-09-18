@@ -7,5 +7,6 @@ public enum GameState {
     SURRENDERED,
     PUSH,
     BLACKJACK,
-    WON
+    WON,
+    STAND
 }
