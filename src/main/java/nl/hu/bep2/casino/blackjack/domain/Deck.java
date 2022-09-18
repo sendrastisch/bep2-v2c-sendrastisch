@@ -1,4 +1,7 @@
-package nl.hu.bep2.casino.blackjack;
+package nl.hu.bep2.casino.blackjack.domain;
+
+import nl.hu.bep2.casino.blackjack.domain.enums.Suit;
+import nl.hu.bep2.casino.blackjack.domain.enums.Value;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,18 +9,20 @@ import java.util.Collections;
 public class Deck {
     private ArrayList<Card> gameDeck;
 
-    public Deck(ArrayList<Card> gameDeck) {
-        this.gameDeck = new ArrayList<Card>();
+    public Deck() {
+
     }
 
     public ArrayList<Card> getGameDeck() { return gameDeck; }
 
     public void createFullDeck(){
+        ArrayList<Card> deck = new ArrayList<>();
         for(Suit suit : Suit.values()){
             for(Value cardValue :Value.values()){
-                this.gameDeck.add(new Card(suit, cardValue));
+                deck.add(new Card(suit, cardValue));
             }
         }
+        gameDeck = deck;
     }
     public Card getNextCardFromDeck(){
 

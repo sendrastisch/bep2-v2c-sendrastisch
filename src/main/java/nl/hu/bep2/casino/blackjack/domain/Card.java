@@ -1,4 +1,7 @@
-package nl.hu.bep2.casino.blackjack;
+package nl.hu.bep2.casino.blackjack.domain;
+
+import nl.hu.bep2.casino.blackjack.domain.enums.Suit;
+import nl.hu.bep2.casino.blackjack.domain.enums.Value;
 
 public class Card {
     private Suit suit;
