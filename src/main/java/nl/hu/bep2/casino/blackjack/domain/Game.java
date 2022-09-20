@@ -25,6 +25,21 @@ public class Game {
         return gameDTO;
     }
 
+    public void startGame() throws GameAlreadyStartedException{
+        if(this.state == GameState.PLAYING){
+            throw new GameAlreadyStartedException("The game has already started");
+        }
+
+        this.state = GameState.PLAYING;
+
+        this.gameDeck = new Deck();
+        gameDeck.createFullDeck();
+        gameDeck.shuffleDeck();
+
+        dealCards();
+        checkGamestate();
+    }
+
     public GameState getState() {
         return state;
     }
@@ -45,19 +60,34 @@ public class Game {
         this.playerHand = playerHand;
     }
 
-    public void startGame() throws GameAlreadyStartedException{
-        if(this.state == GameState.PLAYING){
-            throw new GameAlreadyStartedException("The game has already started");
+    public void playerHit(){
+        this.playerHand.add(gameDeck.getNextCardFromDeck());
+        checkGamestate();
+    }
+
+    public void dealerHit(){
+        this.dealerHand.add(gameDeck.getNextCardFromDeck());
+        checkGamestate();
+    }
+
+    public void stand(){
+        //speler geeft op en dealer blijft hitten tot dood of 17
+
+        while(this.calculateTotalValueHand(this.dealerHand)<17){
+            this.dealerHit();
         }
 
-        this.state = GameState.PLAYING;
+    }
+    public void surrender(){
+        this.state = GameState.SURRENDERED;
+    }
 
-        this.gameDeck = new Deck();
-        gameDeck.createFullDeck();
-        gameDeck.shuffleDeck();
-
-        dealCards();
-        checkGamestate();
+    public void doubleDown(){
+        this.bet*=2;
+        this.playerHand.add(gameDeck.getNextCardFromDeck());
+        while(this.calculateTotalValueHand(this.dealerHand)<17){
+            this.dealerHit();
+        }
     }
 
     public int calculateTotalValueHand(ArrayList<Card> hand){
