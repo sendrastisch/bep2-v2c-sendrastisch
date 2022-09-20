@@ -91,7 +91,7 @@ class GameTest {
         game.setDealerHand(handDealer);
         game.setPlayerHand(handPlayer);
 
-        assertTrue(game.checkBlackjackPlayer());
+        assertTrue(game.checkBlackjack(game.getPlayerHand()));
     }
 
 
