@@ -26,11 +26,7 @@ public class Deck {
         gameDeck = deck;
     }
     public Card getNextCardFromDeck(){
-
-        Card card = this.gameDeck.get(0);
-        gameDeck.remove(card);
-
-        return card;
+        return gameDeck.remove(0);
     }
     private void shuffleDeck(){
         Collections.shuffle(this.gameDeck);
