@@ -33,8 +33,6 @@ public class Game {
         this.state = GameState.PLAYING;
 
         this.gameDeck = new Deck();
-        gameDeck.createFullDeck();
-        gameDeck.shuffleDeck();
 
         dealCards();
         checkGamestate();

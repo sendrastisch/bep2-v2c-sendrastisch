@@ -10,12 +10,13 @@ public class Deck {
     private ArrayList<Card> gameDeck;
 
     public Deck() {
-
+        createFullDeck();
+        shuffleDeck();
     }
 
     public ArrayList<Card> getGameDeck() { return gameDeck; }
 
-    public void createFullDeck(){
+    private void createFullDeck(){
         ArrayList<Card> deck = new ArrayList<>();
         for(Suit suit : Suit.values()){
             for(Value cardValue :Value.values()){
@@ -31,7 +32,7 @@ public class Deck {
 
         return card;
     }
-    public void shuffleDeck(){
+    private void shuffleDeck(){
         Collections.shuffle(this.gameDeck);
     }
 
