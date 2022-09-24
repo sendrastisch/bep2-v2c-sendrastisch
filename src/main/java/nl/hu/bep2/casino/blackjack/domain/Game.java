@@ -1,6 +1,6 @@
 package nl.hu.bep2.casino.blackjack.domain;
 
-import nl.hu.bep2.casino.blackjack.application.dto.GameDTO;
+import nl.hu.bep2.casino.blackjack.presentation.dto.ProgressDTO;
 import nl.hu.bep2.casino.blackjack.domain.enums.GameState;
 import nl.hu.bep2.casino.blackjack.domain.exceptions.GameAlreadyStartedException;
 
@@ -20,9 +20,11 @@ public class Game {
         playerHand = new ArrayList<>();
     }
 
-    public GameDTO getGameDTO(){
-        GameDTO gameDTO = new GameDTO(this.username, this.bet, this.dealerHand, this.playerHand, this.state);
-        return gameDTO;
+    public ProgressDTO getGameDTO(){
+
+        ProgressDTO progressDTO = new ProgressDTO(this.username, this.bet, this.dealerHand, this.playerHand, this.state);
+
+        return progressDTO;
     }
 
     public void startGame() throws GameAlreadyStartedException{
