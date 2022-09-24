@@ -1,7 +1,8 @@
 package nl.hu.bep2.casino.blackjack.application;
 
 import nl.hu.bep2.casino.blackjack.domain.Game;
-import nl.hu.bep2.casino.blackjack.application.dto.GameDTO;
+import nl.hu.bep2.casino.blackjack.domain.enums.GameState;
+import nl.hu.bep2.casino.blackjack.presentation.dto.ProgressDTO;
 import nl.hu.bep2.casino.chips.application.ChipsService;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ public class BlackjackService {
         this.chipsService = chipsService;
     }
 
-    public GameDTO startGame(String playerName, long bet){
+    public ProgressDTO startGame(String playerName, long bet){
         //neem aantal chips op ter hoogte van bet
         chipsService.withdrawChips(playerName, bet);
 
@@ -26,23 +27,25 @@ public class BlackjackService {
         //stort chips op basis van payout
         chipsService.depositChips(playerName, game.calculatePayout());
 
+        System.out.println(game.getGameDTO().dealerHand);
+
         return game.getGameDTO();
     }
 
     //uitgecomment want dit werkt nog niet. heb nog geen database.
 
-//    public GameDTO hit(String playerName){
+    public ProgressDTO hit(String playerName){
 //
 //        Game game = gameRepository.findById(gameId).orElseThrow(() -> new NoGamesFoundException("Wrong id."));
 //        game.playerHit();
 //        //sla spel op
 //        //geef chips indien gewonnen
 //        chipsService.depositChips(playerName, game.calculatePayout());
-//
-//        return game.getGameDTO();
-//    }
-//
-//    public GameDTO stand(String playerName){
+
+        return new ProgressDTO(playerName, 10, null, null, GameState.PLAYING);
+    }
+
+    public ProgressDTO stand(String playerName){
 //        Game game = gameRepository.findById(gameId).orElseThrow(() -> new NoGamesFoundException("Wrong id."));
 //        game.stand();
 //
@@ -50,11 +53,11 @@ public class BlackjackService {
 //
 //        //geef chips indien gewonnen
 //        chipsService.depositChips(playerName, game.calculatePayout());
-//
-//        return game.getGameDTO();
-//    }
-//
-//    public GameDTO surrender(String playerName){
+
+        return new ProgressDTO(playerName, 10, null, null, null);
+    }
+
+    public ProgressDTO surrender(String playerName){
 //        Game game = gameRepository.findById(gameId).orElseThrow(() -> new NoGamesFoundException("Wrong id."));
 //        game.surrender();
 //
@@ -62,21 +65,21 @@ public class BlackjackService {
 //
 //        //geef chips indien gewonnen
 //        chipsService.depositChips(playerName, game.calculatePayout());
+
+        return new ProgressDTO(playerName, 10, null, null, null);
+    }
 //
-//        return game.getGameDTO();
-//    }
-//
-//    public GameDTO doubleDown(String playerName){
+    public ProgressDTO doubleDown(String playerName){
 //        Game game = gameRepository.findById(gameId).orElseThrow(() -> new NoGamesFoundException("Wrong id."));
 //        game.doubleDown();
-//
-//        //sla spel op
-//
-//        //geef chips indien gewonnen
+
+        //sla spel op
+
+        //geef chips indien gewonnen
 //        chipsService.depositChips(playerName, game.calculatePayout());
-//
-//        return game.getGameDTO();
-//    }
+
+        return new ProgressDTO(playerName, 10, null, null, null);
+    }
 
 
 }
