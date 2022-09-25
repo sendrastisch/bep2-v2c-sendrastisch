@@ -1,5 +1,7 @@
-package nl.hu.bep2.casino.blackjack.domain;
+package nl.hu.bep2.casino;
 
+import nl.hu.bep2.casino.blackjack.domain.Card;
+import nl.hu.bep2.casino.blackjack.domain.Hand;
 import nl.hu.bep2.casino.blackjack.domain.enums.Suit;
 import nl.hu.bep2.casino.blackjack.domain.enums.Value;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package nl.hu.bep2.casino.blackjack;
+package nl.hu.bep2.casino;
 
 import nl.hu.bep2.casino.blackjack.domain.Card;
 import nl.hu.bep2.casino.blackjack.domain.Deck;
