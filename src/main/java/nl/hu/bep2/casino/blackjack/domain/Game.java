@@ -4,20 +4,17 @@ import nl.hu.bep2.casino.blackjack.presentation.dto.ProgressDTO;
 import nl.hu.bep2.casino.blackjack.domain.enums.GameState;
 import nl.hu.bep2.casino.blackjack.domain.exceptions.GameAlreadyStartedException;
 
-import java.util.ArrayList;
 
 public class Game {
     private long id;
     private String username;
     private long bet;
     private GameState state;
-
     private Deck gameDeck;
-    private ArrayList<Card> dealerHand;
-    private ArrayList<Card> playerHand;
+    private Hand dealerHand;
+    private Hand playerHand;
     public Game(){
-        dealerHand = new ArrayList<>();
-        playerHand = new ArrayList<>();
+
     }
 
     public ProgressDTO getGameDTO(){
@@ -35,6 +32,8 @@ public class Game {
         this.state = GameState.PLAYING;
 
         this.gameDeck = new Deck();
+        this.dealerHand = new Hand();
+        this.playerHand = new Hand();
 
         dealCards();
         checkGamestate();
@@ -44,36 +43,35 @@ public class Game {
         return state;
     }
 
-    public ArrayList<Card> getDealerHand() {
+    public Hand getDealerHand() {
         return dealerHand;
     }
 
-    public ArrayList<Card> getPlayerHand() {
+    public Hand getPlayerHand() {
         return playerHand;
     }
 
-    public void setDealerHand(ArrayList<Card> dealerHand) {
+    public void setDealerHand(Hand dealerHand) {
         this.dealerHand = dealerHand;
     }
 
-    public void setPlayerHand(ArrayList<Card> playerHand) {
+    public void setPlayerHand(Hand playerHand) {
         this.playerHand = playerHand;
     }
 
     public void playerHit(){
-        this.playerHand.add(gameDeck.getNextCardFromDeck());
+        this.playerHand.addCardToHand(gameDeck.getNextCardFromDeck());
         checkGamestate();
     }
 
     public void dealerHit(){
-        this.dealerHand.add(gameDeck.getNextCardFromDeck());
+        this.dealerHand.addCardToHand(gameDeck.getNextCardFromDeck());
         checkGamestate();
     }
-
     public void stand(){
         //speler geeft op en dealer blijft hitten tot dood of 17
 
-        while(this.calculateTotalValueHand(this.dealerHand)<17){
+        while(dealerHand.calculateTotalValueHand()<17){
             this.dealerHit();
         }
 
@@ -81,69 +79,34 @@ public class Game {
     public void surrender(){
         this.state = GameState.SURRENDERED;
     }
-
     public void doubleDown(){
         this.bet*=2;
-        this.playerHand.add(gameDeck.getNextCardFromDeck());
-        while(this.calculateTotalValueHand(this.dealerHand)<17){
+        this.playerHand.addCardToHand(gameDeck.getNextCardFromDeck());
+        while(dealerHand.calculateTotalValueHand()<17){
             this.dealerHit();
         }
     }
-
-    public int calculateTotalValueHand(ArrayList<Card> hand){
-        int totalValue = 0;
-        int aces = 0;
-
-        for(Card card : hand){
-            switch(card.getValue()){
-                case TWO: totalValue += 2; break;
-                case THREE: totalValue += 3; break;
-                case FOUR: totalValue += 4; break;
-                case FIVE: totalValue += 5; break;
-                case SIX: totalValue += 6; break;
-                case SEVEN: totalValue += 7; break;
-                case EIGHT: totalValue += 8; break;
-                case NINE: totalValue += 9; break;
-                case TEN: totalValue += 10; break;
-                case JACK: totalValue += 10; break;
-                case QUEEN: totalValue += 10; break;
-                case KING: totalValue += 10; break;
-                case ACE: aces += 1; break;
-            }
-        }
-
-        for(int i = 0; i < aces; i++){
-            if(totalValue > 10){
-                totalValue+=1;
-            } else{
-                totalValue+=11;
-            }
-        }
-
-        return totalValue;
-    }
-
     public void checkGamestate() {
-        if (checkBlackjack(this.playerHand) && this.playerHand.size() == 2) {
-            if (checkBlackjack(this.dealerHand)) {
+        if (checkBlackjack(playerHand) && playerHand.getSizeOfHand() == 2) {
+            if (checkBlackjack(dealerHand)) {
                 state = GameState.PUSH;
             } else {
                 state = GameState.BLACKJACK;
             }
             return;
         }
-        if (checkIfOver21(this.playerHand)) {
+        if (checkIfOver21(playerHand)) {
             state = GameState.BUST;
             return;
         }
-        if (checkIfOver21(this.dealerHand)) {
+        if (checkIfOver21(dealerHand)) {
             state = GameState.WON;
             return;
         }
         if (state == GameState.STAND) {
-            if (calculateTotalValueHand(this.playerHand) < calculateTotalValueHand(this.dealerHand)) {
+            if (playerHand.calculateTotalValueHand() < dealerHand.calculateTotalValueHand()) {
                 state = GameState.LOST;
-            } else if (calculateTotalValueHand(this.playerHand) == calculateTotalValueHand(this.dealerHand)) {
+            } else if (playerHand.calculateTotalValueHand() == dealerHand.calculateTotalValueHand()) {
                 state = GameState.PUSH;
             } else {
                 state = GameState.WON;
@@ -151,23 +114,24 @@ public class Game {
         }
     }
 
-    public boolean checkIfOver21(ArrayList<Card> hand){
-        return this.calculateTotalValueHand(hand) > 21;
+    public boolean checkIfOver21(Hand hand){
+        return hand.calculateTotalValueHand() > 21;
     }
 
-    public boolean checkBlackjack(ArrayList<Card> hand){
-        int total = calculateTotalValueHand(hand);
+    public boolean checkBlackjack(Hand hand){
+        int total = hand.calculateTotalValueHand();
 
         return total == 21;
     }
 
     public void dealCards(){
         //take 2 cards from deck en geef aan speler
-        playerHand.add(gameDeck.getNextCardFromDeck());
-        playerHand.add(gameDeck.getNextCardFromDeck());
+        playerHand.addCardToHand(gameDeck.getNextCardFromDeck());
+        playerHand.addCardToHand(gameDeck.getNextCardFromDeck());
         //take 2 cards from deck en geef aan dealer
-        dealerHand.add(gameDeck.getNextCardFromDeck());
-        dealerHand.add(gameDeck.getNextCardFromDeck());
+        dealerHand.addCardToHand(gameDeck.getNextCardFromDeck());
+        dealerHand.addCardToHand(gameDeck.getNextCardFromDeck());
+
     }
 
     public long calculatePayout(){
