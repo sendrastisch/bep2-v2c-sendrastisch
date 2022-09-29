@@ -27,8 +27,6 @@ public class BlackjackService {
         //stort chips op basis van payout
         chipsService.depositChips(playerName, game.calculatePayout());
 
-        System.out.println(game.getGameDTO().dealerHand);
-
         return game.getGameDTO();
     }
 

@@ -1,5 +1,8 @@
 package nl.hu.bep2.casino.blackjack.domain;
 
+import nl.hu.bep2.casino.blackjack.presentation.dto.CardDTO;
+import nl.hu.bep2.casino.blackjack.presentation.dto.HandDTO;
+
 import java.util.ArrayList;
 
 public class Hand {
@@ -8,6 +11,11 @@ public class Hand {
     public Hand() {
         hand = new ArrayList<>();
     }
+
+    public HandDTO getHandDTO(){
+        return new HandDTO(this.hand);
+    }
+
     public int getSizeOfHand(){
         return hand.size();
     }
@@ -51,8 +59,11 @@ public class Hand {
 
     @Override
     public String toString() {
-        return "Hand{" +
-                "hand=" + hand +
-                '}';
+        String ding = "";
+
+        for (Card card: hand) {
+            ding = ding + card.toString();
+        }
+        return ding;
     }
 }

@@ -18,10 +18,9 @@ public class Game {
     }
 
     public ProgressDTO getGameDTO(){
+        System.out.println(this.dealerHand);
 
-        ProgressDTO progressDTO = new ProgressDTO(this.username, this.bet, this.dealerHand, this.playerHand, this.state);
-
-        return progressDTO;
+        return new ProgressDTO(this.username, this.bet, this.dealerHand.getHandDTO(), this.playerHand.getHandDTO(), this.state);
     }
 
     public void startGame() throws GameAlreadyStartedException{

@@ -9,18 +9,16 @@ import java.util.ArrayList;
 public class ProgressDTO {
     public String username;
     public long bet;
-    public Hand dealerHand;
-    public Hand playerHand;
+    public HandDTO dealerHand;
+    public HandDTO playerHand;
     public GameState state;
 
-    public ProgressDTO(String username, long bet, Hand dealerHand, Hand playerHand, GameState state) {
+    public ProgressDTO(String username, long bet, HandDTO dealerHand, HandDTO playerHand, GameState state) {
         this.username = username;
         this.bet = bet;
         this.dealerHand = dealerHand;
         this.playerHand = playerHand;
         this.state = state;
     }
-
-
 
 }
