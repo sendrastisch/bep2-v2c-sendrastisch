@@ -3,25 +3,34 @@ package nl.hu.bep2.casino.blackjack.domain;
 import nl.hu.bep2.casino.blackjack.presentation.dto.ProgressDTO;
 import nl.hu.bep2.casino.blackjack.domain.enums.GameState;
 import nl.hu.bep2.casino.blackjack.domain.exceptions.GameAlreadyStartedException;
+import org.springframework.context.annotation.Bean;
 
+import javax.persistence.*;
 
+@Entity
 public class Game {
+
+    @Id
+    @GeneratedValue
     private long id;
     private String username;
     private long bet;
     private GameState state;
+
+    @ManyToOne
     private Deck gameDeck;
+
+    @ManyToOne
     private Hand dealerHand;
+
+    @ManyToOne
     private Hand playerHand;
+
     public Game(){
 
     }
 
-    public ProgressDTO getGameDTO(){
-        System.out.println(this.dealerHand);
 
-        return new ProgressDTO(this.username, this.bet, this.dealerHand.getHandDTO(), this.playerHand.getHandDTO(), this.state);
-    }
 
     public void startGame() throws GameAlreadyStartedException{
         if(this.state == GameState.PLAYING){
@@ -36,6 +45,10 @@ public class Game {
 
         dealCards();
         checkGamestate();
+    }
+
+    public ProgressDTO getGameDTO(){
+        return new ProgressDTO(this.username, this.bet, this.dealerHand.getHandDTO(), this.playerHand.getHandDTO(), this.state);
     }
 
     public GameState getState() {

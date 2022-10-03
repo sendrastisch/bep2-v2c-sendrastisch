@@ -1,17 +1,23 @@
 package nl.hu.bep2.casino.blackjack.application;
 
+import nl.hu.bep2.casino.blackjack.data.GameRepository;
 import nl.hu.bep2.casino.blackjack.domain.Game;
 import nl.hu.bep2.casino.blackjack.domain.enums.GameState;
 import nl.hu.bep2.casino.blackjack.presentation.dto.ProgressDTO;
 import nl.hu.bep2.casino.chips.application.ChipsService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class BlackjackService {
     private final ChipsService chipsService;
+    private final GameRepository gameRepository;
 
-    public BlackjackService(ChipsService chipsService) {
+    public BlackjackService(ChipsService chipsService, GameRepository gameRepository) {
         this.chipsService = chipsService;
+        this.gameRepository = gameRepository;
     }
 
     public ProgressDTO startGame(String playerName, long bet){
@@ -22,7 +28,7 @@ public class BlackjackService {
         Game game = new Game();
         game.startGame();
 
-        //sla spel op (later)
+        gameRepository.save(game);
 
         //stort chips op basis van payout
         chipsService.depositChips(playerName, game.calculatePayout());

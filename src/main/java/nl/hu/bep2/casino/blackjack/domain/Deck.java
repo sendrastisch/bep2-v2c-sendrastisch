@@ -3,10 +3,18 @@ package nl.hu.bep2.casino.blackjack.domain;
 import nl.hu.bep2.casino.blackjack.domain.enums.Suit;
 import nl.hu.bep2.casino.blackjack.domain.enums.Value;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
+@Entity
 public class Deck {
+
+    @Id
+    @GeneratedValue
+    private long id;
+
+    @OneToMany
     private ArrayList<Card> gameDeck;
 
     public Deck() {

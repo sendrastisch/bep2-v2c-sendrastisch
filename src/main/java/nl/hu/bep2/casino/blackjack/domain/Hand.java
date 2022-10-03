@@ -3,9 +3,20 @@ package nl.hu.bep2.casino.blackjack.domain;
 import nl.hu.bep2.casino.blackjack.presentation.dto.CardDTO;
 import nl.hu.bep2.casino.blackjack.presentation.dto.HandDTO;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 
+@Entity
 public class Hand {
+
+    @Id
+    @GeneratedValue
+    private long id;
+
+    @OneToMany
     private ArrayList<Card> hand;
 
     public Hand() {
