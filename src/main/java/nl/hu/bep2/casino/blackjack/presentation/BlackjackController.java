@@ -1,6 +1,7 @@
 package nl.hu.bep2.casino.blackjack.presentation;
 
 import nl.hu.bep2.casino.blackjack.application.BlackjackService;
+import nl.hu.bep2.casino.blackjack.application.exceptions.NoGamesFoundException;
 import nl.hu.bep2.casino.blackjack.domain.exceptions.GameAlreadyStartedException;
 import nl.hu.bep2.casino.blackjack.presentation.dto.ProgressDTO;
 import nl.hu.bep2.casino.blackjack.presentation.dto.GameData;
@@ -8,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/games")
@@ -19,6 +22,15 @@ public class BlackjackController {
         this.blackjackService = blackjackService;
     }
 
+
+    @GetMapping("/all")
+    public ArrayList<ProgressDTO> getAllGames() {
+        try {
+            return blackjackService.findAllGames();
+        } catch (NoGamesFoundException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
+        }
+    }
     @PostMapping("/start")
     public ProgressDTO startGame(@Validated @RequestBody GameData gameData) {
         try {

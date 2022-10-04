@@ -2,12 +2,11 @@ package nl.hu.bep2.casino.blackjack.domain;
 
 import nl.hu.bep2.casino.blackjack.presentation.dto.CardDTO;
 import nl.hu.bep2.casino.blackjack.presentation.dto.HandDTO;
+import org.hibernate.annotations.Cascade;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Hand {
@@ -17,10 +16,12 @@ public class Hand {
     private long id;
 
     @OneToMany
-    private ArrayList<Card> hand;
+    @JoinColumn
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private List<Card> hand = new ArrayList<>();
 
     public Hand() {
-        hand = new ArrayList<>();
+
     }
 
     public HandDTO getHandDTO(){

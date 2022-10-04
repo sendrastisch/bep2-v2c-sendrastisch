@@ -3,6 +3,7 @@ package nl.hu.bep2.casino.blackjack.domain;
 import nl.hu.bep2.casino.blackjack.presentation.dto.ProgressDTO;
 import nl.hu.bep2.casino.blackjack.domain.enums.GameState;
 import nl.hu.bep2.casino.blackjack.domain.exceptions.GameAlreadyStartedException;
+import org.hibernate.annotations.Cascade;
 import org.springframework.context.annotation.Bean;
 
 import javax.persistence.*;
@@ -15,22 +16,27 @@ public class Game {
     private long id;
     private String username;
     private long bet;
+    @Enumerated(EnumType.STRING)
     private GameState state;
 
     @ManyToOne
+    @JoinColumn
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Deck gameDeck;
 
     @ManyToOne
+    @JoinColumn
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Hand dealerHand;
 
-    @ManyToOne
+    @ManyToOne    @JoinColumn
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+
     private Hand playerHand;
 
     public Game(){
 
     }
-
-
 
     public void startGame() throws GameAlreadyStartedException{
         if(this.state == GameState.PLAYING){

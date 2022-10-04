@@ -1,5 +1,6 @@
 package nl.hu.bep2.casino.blackjack.application;
 
+import nl.hu.bep2.casino.blackjack.application.exceptions.NoGamesFoundException;
 import nl.hu.bep2.casino.blackjack.data.GameRepository;
 import nl.hu.bep2.casino.blackjack.domain.Game;
 import nl.hu.bep2.casino.blackjack.domain.enums.GameState;
@@ -8,6 +9,8 @@ import nl.hu.bep2.casino.chips.application.ChipsService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -31,9 +34,26 @@ public class BlackjackService {
         gameRepository.save(game);
 
         //stort chips op basis van payout
-        chipsService.depositChips(playerName, game.calculatePayout());
+        if(game.checkBlackjack(game.getPlayerHand())){
+            chipsService.depositChips(playerName, game.calculatePayout());
+        }
 
         return game.getGameDTO();
+    }
+
+    public ArrayList<ProgressDTO> findAllGames() {
+        List<Game> games = gameRepository.findAll();
+        ArrayList<ProgressDTO> dto = new ArrayList<>();
+
+        if (games.isEmpty()) {
+            throw new NoGamesFoundException("No games are found.");
+        } else {
+            for (Game g : games) {
+                dto.add(g.getGameDTO());
+            }
+        }
+
+        return dto;
     }
 
     //uitgecomment want dit werkt nog niet. heb nog geen database.

@@ -2,10 +2,12 @@ package nl.hu.bep2.casino.blackjack.domain;
 
 import nl.hu.bep2.casino.blackjack.domain.enums.Suit;
 import nl.hu.bep2.casino.blackjack.domain.enums.Value;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
 public class Deck {
@@ -15,14 +17,16 @@ public class Deck {
     private long id;
 
     @OneToMany
-    private ArrayList<Card> gameDeck;
+    @JoinColumn
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private List<Card> gameDeck = new ArrayList<>();
 
     public Deck() {
         createFullDeck();
         shuffleDeck();
     }
 
-    public ArrayList<Card> getGameDeck() { return gameDeck; }
+    public List<Card> getGameDeck() { return gameDeck; }
 
     private void createFullDeck(){
         ArrayList<Card> deck = new ArrayList<>();

@@ -3,11 +3,12 @@ package nl.hu.bep2.casino.blackjack.presentation.dto;
 import nl.hu.bep2.casino.blackjack.domain.Card;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HandDTO {
     private ArrayList<CardDTO> hand;
 
-    public HandDTO(ArrayList<Card> cards) {
+    public HandDTO(List<Card> cards) {
         ArrayList<CardDTO> cardDTOS = new ArrayList<>();
 
         for (Card card:cards) {
