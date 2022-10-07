@@ -29,7 +29,7 @@ public class BlackjackService {
 
         //maak nieuw spel aan
         Game game = new Game();
-        game.startGame();
+        game.startGame(playerName, bet);
 
         gameRepository.save(game);
 
@@ -56,6 +56,14 @@ public class BlackjackService {
         return dto;
     }
 
+    public void deleteAllGames(){
+        gameRepository.deleteAll();
+    }
+
+    public void deleteGameById(long id){
+        gameRepository.deleteById(id);
+    }
+
     //uitgecomment want dit werkt nog niet. heb nog geen database.
 
     public ProgressDTO hit(String playerName){
@@ -66,7 +74,7 @@ public class BlackjackService {
 //        //geef chips indien gewonnen
 //        chipsService.depositChips(playerName, game.calculatePayout());
 
-        return new ProgressDTO(playerName, 10, null, null, GameState.PLAYING);
+        return new ProgressDTO(0, playerName, 10, null, null, GameState.PLAYING);
     }
 
     public ProgressDTO stand(String playerName){
@@ -78,7 +86,7 @@ public class BlackjackService {
 //        //geef chips indien gewonnen
 //        chipsService.depositChips(playerName, game.calculatePayout());
 
-        return new ProgressDTO(playerName, 10, null, null, null);
+        return new ProgressDTO(0, playerName, 10, null, null, null);
     }
 
     public ProgressDTO surrender(String playerName){
@@ -90,7 +98,7 @@ public class BlackjackService {
 //        //geef chips indien gewonnen
 //        chipsService.depositChips(playerName, game.calculatePayout());
 
-        return new ProgressDTO(playerName, 10, null, null, null);
+        return new ProgressDTO(0, playerName, 10, null, null, null);
     }
 //
     public ProgressDTO doubleDown(String playerName){
@@ -102,7 +110,7 @@ public class BlackjackService {
         //geef chips indien gewonnen
 //        chipsService.depositChips(playerName, game.calculatePayout());
 
-        return new ProgressDTO(playerName, 10, null, null, null);
+        return new ProgressDTO(0, playerName, 10, null, null, null);
     }
 
 
