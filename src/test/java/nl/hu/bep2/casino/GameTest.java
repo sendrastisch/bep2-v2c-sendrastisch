@@ -17,14 +17,14 @@ class GameTest {
     @Test
     void startGameTestState(){
         Game game = new Game();
-        game.startGame();
+        game.startGame(null, 0);
         assertEquals(game.getState(), GameState.PLAYING);
     }
 
     @Test
     void startGameTestHands(){
         Game game = new Game();
-        game.startGame();
+        game.startGame(null, 0);
 
         assertEquals(game.getDealerHand().getSizeOfHand(), 2);
         assertEquals(game.getPlayerHand().getSizeOfHand(), 2);
@@ -35,8 +35,8 @@ class GameTest {
 
         assertThrows(GameAlreadyStartedException.class, () -> {
             Game game = new Game();
-            game.startGame();
-            game.startGame();
+            game.startGame(null, 0);
+            game.startGame(null ,0);
         });
     }
     @Test
