@@ -40,6 +40,12 @@ public class BlackjackController {
         }
     }
 
+    @DeleteMapping("/all")
+    public void deleteAllGames(){blackjackService.deleteAllGames();}
+
+    @DeleteMapping("/{id}")
+    public void deleteGameById(@PathVariable long id){blackjackService.deleteGameById(id);}
+
     @PatchMapping("/hit")
     public ProgressDTO hit() {
         return blackjackService.hit("sannie");
