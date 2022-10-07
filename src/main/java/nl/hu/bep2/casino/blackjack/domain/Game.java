@@ -38,13 +38,15 @@ public class Game {
 
     }
 
-    public void startGame() throws GameAlreadyStartedException{
+    public void startGame(String username, long bet) throws GameAlreadyStartedException{
         if(this.state == GameState.PLAYING){
             throw new GameAlreadyStartedException("The game has already started");
         }
 
         this.state = GameState.PLAYING;
 
+        this.username = username;
+        this.bet = bet;
         this.gameDeck = new Deck();
         this.dealerHand = new Hand();
         this.playerHand = new Hand();
@@ -54,7 +56,7 @@ public class Game {
     }
 
     public ProgressDTO getGameDTO(){
-        return new ProgressDTO(this.username, this.bet, this.dealerHand.getHandDTO(), this.playerHand.getHandDTO(), this.state);
+        return new ProgressDTO(this.id, this.username, this.bet, this.dealerHand.getHandDTO(), this.playerHand.getHandDTO(), this.state);
     }
 
     public GameState getState() {
