@@ -2,7 +2,6 @@ package nl.hu.bep2.casino.blackjack.presentation;
 
 import nl.hu.bep2.casino.blackjack.application.BlackjackService;
 import nl.hu.bep2.casino.blackjack.application.exceptions.NoGamesFoundException;
-import nl.hu.bep2.casino.blackjack.domain.exceptions.GameAlreadyStartedException;
 import nl.hu.bep2.casino.blackjack.presentation.dto.ProgressDTO;
 import nl.hu.bep2.casino.blackjack.presentation.dto.GameData;
 import org.springframework.http.HttpStatus;
@@ -31,21 +30,20 @@ public class BlackjackController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
         }
     }
-    @PostMapping("/start")
-    public ProgressDTO startGame(@Validated @RequestBody GameData gameData) {
-        try {
-            return blackjackService.startGame(gameData.username, gameData.bet);
-        } catch (GameAlreadyStartedException exception) {
+
+    @GetMapping("/{id}" )
+    public ProgressDTO findGameById(@PathVariable long id){
+        try{
+            return blackjackService.findGameById(id);
+        }catch(NoGamesFoundException exception){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
         }
     }
 
-    @DeleteMapping("/all")
-    public void deleteAllGames(){blackjackService.deleteAllGames();}
-
-    @DeleteMapping("/{id}")
-    public void deleteGameById(@PathVariable long id){blackjackService.deleteGameById(id);}
-
+    @PostMapping("/start")
+    public ProgressDTO startGame(@Validated @RequestBody GameData gameData) {
+        return blackjackService.startGame(gameData.username, gameData.bet);
+    }
     @PatchMapping("/hit")
     public ProgressDTO hit() {
         return blackjackService.hit("sannie");
@@ -65,6 +63,12 @@ public class BlackjackController {
     public ProgressDTO stand() {
         return blackjackService.stand("stand");
     }
+
+    @DeleteMapping("/all")
+    public void deleteAllGames(){blackjackService.deleteAllGames();}
+
+    @DeleteMapping("/{id}")
+    public void deleteGameById(@PathVariable long id){blackjackService.deleteGameById(id);}
 
 
 

@@ -6,7 +6,6 @@ import nl.hu.bep2.casino.blackjack.domain.Hand;
 import nl.hu.bep2.casino.blackjack.domain.enums.GameState;
 import nl.hu.bep2.casino.blackjack.domain.enums.Suit;
 import nl.hu.bep2.casino.blackjack.domain.enums.Value;
-import nl.hu.bep2.casino.blackjack.domain.exceptions.GameAlreadyStartedException;
 import org.junit.jupiter.api.Test;
 
 

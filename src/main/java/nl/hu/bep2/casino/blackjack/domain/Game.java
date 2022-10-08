@@ -2,9 +2,7 @@ package nl.hu.bep2.casino.blackjack.domain;
 
 import nl.hu.bep2.casino.blackjack.presentation.dto.ProgressDTO;
 import nl.hu.bep2.casino.blackjack.domain.enums.GameState;
-import nl.hu.bep2.casino.blackjack.domain.exceptions.GameAlreadyStartedException;
 import org.hibernate.annotations.Cascade;
-import org.springframework.context.annotation.Bean;
 
 import javax.persistence.*;
 
@@ -38,13 +36,9 @@ public class Game {
 
     }
 
-    public void startGame(String username, long bet) throws GameAlreadyStartedException{
-        if(this.state == GameState.PLAYING){
-            throw new GameAlreadyStartedException("The game has already started");
-        }
+    public void startGame(String username, long bet){
 
         this.state = GameState.PLAYING;
-
         this.username = username;
         this.bet = bet;
         this.gameDeck = new Deck();

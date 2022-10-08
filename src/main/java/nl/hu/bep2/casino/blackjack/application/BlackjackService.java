@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -52,8 +53,13 @@ public class BlackjackService {
                 dto.add(g.getGameDTO());
             }
         }
-
         return dto;
+    }
+
+    public ProgressDTO findGameById(long id){
+        Game game = gameRepository.findById(id).orElseThrow(() -> new NoGamesFoundException("No game is found."));
+
+        return game.getGameDTO();
     }
 
     public void deleteAllGames(){
@@ -67,12 +73,12 @@ public class BlackjackService {
     //uitgecomment want dit werkt nog niet. heb nog geen database.
 
     public ProgressDTO hit(String playerName){
-//
-//        Game game = gameRepository.findById(gameId).orElseThrow(() -> new NoGamesFoundException("Wrong id."));
-//        game.playerHit();
-//        //sla spel op
-//        //geef chips indien gewonnen
-//        chipsService.depositChips(playerName, game.calculatePayout());
+
+//        Game game = gameRepository.findById(gamed).orElseThrow(() -> new NoGamesFoundException("Wrong id."));
+        game.playerHit();
+        //sla spel op
+        //geef chips indien gewonnen
+        chipsService.depositChips(playerName, game.calculatePayout());
 
         return new ProgressDTO(0, playerName, 10, null, null, GameState.PLAYING);
     }
