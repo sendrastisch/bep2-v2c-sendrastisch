@@ -2,6 +2,7 @@ package nl.hu.bep2.casino.blackjack.presentation;
 
 import nl.hu.bep2.casino.blackjack.application.BlackjackService;
 import nl.hu.bep2.casino.blackjack.application.exceptions.NoGamesFoundException;
+import nl.hu.bep2.casino.blackjack.domain.exceptions.GameAlreadyOverException;
 import nl.hu.bep2.casino.blackjack.presentation.dto.ProgressDTO;
 import nl.hu.bep2.casino.blackjack.presentation.dto.GameData;
 import nl.hu.bep2.casino.security.domain.UserProfile;
@@ -58,23 +59,42 @@ public class BlackjackController {
     }
     @PatchMapping("/hit")
     public ProgressDTO hit(Authentication authentication) {
-        UserProfile profile = (UserProfile) authentication.getPrincipal();
-        return blackjackService.hit(profile.getUsername());
+        try{
+            UserProfile profile = (UserProfile) authentication.getPrincipal();
+            return blackjackService.hit(profile.getUsername());
+        } catch(GameAlreadyOverException exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        }
     }
 
     @PatchMapping("/double")
-    public ProgressDTO doubleDown() {
-        return blackjackService.doubleDown("doubleDown");
+    public ProgressDTO doubleDown(Authentication authentication) {
+        try{
+            UserProfile profile = (UserProfile) authentication.getPrincipal();
+            return blackjackService.doubleDown(profile.getUsername());
+        } catch(GameAlreadyOverException exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        }
     }
 
     @PatchMapping("/surrender")
-    public ProgressDTO surrender() {
-        return blackjackService.surrender("surrender");
+    public ProgressDTO surrender(Authentication authentication) {
+        try{
+            UserProfile profile = (UserProfile) authentication.getPrincipal();
+            return blackjackService.surrender(profile.getUsername());
+        } catch(GameAlreadyOverException exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        }
     }
 
     @PatchMapping("/stand")
-    public ProgressDTO stand() {
-        return blackjackService.stand("stand");
+    public ProgressDTO stand(Authentication authentication) {
+        try{
+            UserProfile profile = (UserProfile) authentication.getPrincipal();
+            return blackjackService.stand(profile.getUsername());
+        } catch(GameAlreadyOverException exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        }
     }
 
     @DeleteMapping("/all")
