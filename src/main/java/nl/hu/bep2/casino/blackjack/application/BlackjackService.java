@@ -63,6 +63,7 @@ public class BlackjackService {
 
     public ProgressDTO findGameByUsername(String username){
         Game game = gameRepository.findByUsername(username).orElseThrow(()-> new NoGamesFoundException("No game is found. "));
+
         return game.getGameDTO();
     }
 
@@ -77,50 +78,42 @@ public class BlackjackService {
     public ProgressDTO hit(String playerName){
 
         Game game = gameRepository.findByUsername(playerName).orElseThrow(() -> new NoGamesFoundException("No games found with this username."));
-        game.playerHit();
 
+        game.playerHit();
         gameRepository.save(game);
-        //sla spel op
-        //geef chips indien gewonnen
         chipsService.depositChips(playerName, game.calculatePayout());
 
         return game.getGameDTO();
     }
 
     public ProgressDTO stand(String playerName){
-//        Game game = gameRepository.findById(gameId).orElseThrow(() -> new NoGamesFoundException("Wrong id."));
-//        game.stand();
-//
-//        //sla spel op
-//
-//        //geef chips indien gewonnen
-//        chipsService.depositChips(playerName, game.calculatePayout());
+        Game game = gameRepository.findByUsername(playerName).orElseThrow(() -> new NoGamesFoundException("No games found with this username."));
 
-        return new ProgressDTO(0, playerName, 10, null, null, null);
+        game.stand();
+        gameRepository.save(game);
+        chipsService.depositChips(playerName, game.calculatePayout());
+
+        return game.getGameDTO();
     }
 
     public ProgressDTO surrender(String playerName){
-//        Game game = gameRepository.findById(gameId).orElseThrow(() -> new NoGamesFoundException("Wrong id."));
-//        game.surrender();
-//
-//        //sla spel op
-//
-//        //geef chips indien gewonnen
-//        chipsService.depositChips(playerName, game.calculatePayout());
+        Game game = gameRepository.findByUsername(playerName).orElseThrow(() -> new NoGamesFoundException("No games found with this username."));
 
-        return new ProgressDTO(0, playerName, 10, null, null, null);
+        game.surrender();
+        gameRepository.save(game);
+        chipsService.depositChips(playerName, game.calculatePayout());
+
+        return game.getGameDTO();
     }
-//
     public ProgressDTO doubleDown(String playerName){
-//        Game game = gameRepository.findById(gameId).orElseThrow(() -> new NoGamesFoundException("Wrong id."));
-//        game.doubleDown();
+        Game game = gameRepository.findByUsername(playerName).orElseThrow(() -> new NoGamesFoundException("No games found with this username."));
 
-        //sla spel op
+        game.doubleDown();
+        gameRepository.save(game);
 
-        //geef chips indien gewonnen
-//        chipsService.depositChips(playerName, game.calculatePayout());
+        chipsService.depositChips(playerName, game.calculatePayout());
 
-        return new ProgressDTO(0, playerName, 10, null, null, null);
+        return game.getGameDTO();
     }
 
 
