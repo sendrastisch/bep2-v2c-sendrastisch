@@ -1,5 +1,6 @@
 package nl.hu.bep2.casino.blackjack.domain;
 
+import nl.hu.bep2.casino.blackjack.domain.exceptions.GameAlreadyOverException;
 import nl.hu.bep2.casino.blackjack.presentation.dto.ProgressDTO;
 import nl.hu.bep2.casino.blackjack.domain.enums.GameState;
 import org.hibernate.annotations.Cascade;
@@ -74,6 +75,9 @@ public class Game {
     }
 
     public void playerHit(){
+        if(this.state != GameState.PLAYING){
+            throw new GameAlreadyOverException("The game is already over! :(");
+        }
         this.playerHand.addCardToHand(gameDeck.getNextCardFromDeck());
         checkGamestate();
     }
@@ -101,7 +105,7 @@ public class Game {
         }
     }
     public void checkGamestate() {
-        if (checkBlackjack(playerHand) && playerHand.getSizeOfHand() == 2) {
+        if (checkBlackjack(playerHand) && playerHand.getSizeOfHand() >= 2) {
             if (checkBlackjack(dealerHand)) {
                 state = GameState.PUSH;
             } else {
