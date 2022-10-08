@@ -89,6 +89,13 @@ public class Game {
     public void stand(){
         //speler geeft op en dealer blijft hitten tot dood of 17
 
+        if(this.state != GameState.PLAYING){
+            throw new GameAlreadyOverException("The game is already over! :(");
+        }
+
+        this.state = GameState.STAND;
+        checkGamestate();
+
         while(dealerHand.calculateTotalValueHand()<17){
             this.dealerHit();
         }
@@ -98,11 +105,14 @@ public class Game {
         this.state = GameState.SURRENDERED;
     }
     public void doubleDown(){
+        if(this.state != GameState.PLAYING){
+            throw new GameAlreadyOverException("The game is already over! :(");
+        }
+
         this.bet*=2;
         this.playerHand.addCardToHand(gameDeck.getNextCardFromDeck());
-        while(dealerHand.calculateTotalValueHand()<17){
-            this.dealerHit();
-        }
+
+        stand();
     }
     public void checkGamestate() {
         if (checkBlackjack(playerHand) && playerHand.getSizeOfHand() >= 2) {
